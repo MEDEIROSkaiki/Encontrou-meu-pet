@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro de Animal</title>
+  <link rel="stylesheet" href="cadastro.css">
+</head>
+<body>
+  <div class="container">
+    <img src="Images/Logo.png" alt="Logo" class="logo">
+    <img src="Images/Cachorro.png" alt="Mulher com cachorro" class="img-left">
+    <img src="Images/Cachorro e gato.png" alt="Gato e cachorro" class="img-right">
+
+    <div class="form-box">
+      <div class="form-group">
+        <label>Situação <span style="color: red;">*</span></label><br><br>
+        <label><input type="radio" name="situacao" value="perdido"> Perdido</label>
+        <label><input type="radio" name="situacao" value="encontrado"> Encontrado</label>
+      </div>
+
+      <div class="form-group">
+        <label for="nome">Nome <span style="color: red;">*</span></label><br>
+        <input type="text" id="nome" name="nome">
+      </div>
+
+      <div class="form-group">
+        <label for="especie">Espécie <span style="color: red;">*</span></label><br>
+        <select id="especie" name="especie">
+          <option value="">Selecione</option>
+          <option value="cachorro">Cachorro</option>
+          <option value="gato">Gato</option>
+          <option value="passaro">Pássaro</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="genero">Gênero <span style="color: red;">*</span></label><br>
+        <select id="genero" name="genero">
+          <option value="">Selecione</option>
+          <option value="macho">Macho</option>
+          <option value="femea">Fêmea</option>
+        </select>
+      </div>
+
+      <div class="buttons">
+        <button class="btn voltar">Voltar</button>
+        <button class="btn continuar">Continuar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Validação e salvamento
+    document.querySelector('.continuar').addEventListener('click', () => {
+      const situacao = document.querySelector('input[name="situacao"]:checked')?.value;
+      const nome = document.getElementById('nome').value.trim();
+      const especie = document.getElementById('especie').value;
+      const genero = document.getElementById('genero').value;
+
+      if (!situacao || !nome || !especie || !genero) {
+        alert("Por favor, preencha todos os campos obrigatórios antes de continuar.");
+        return;
+      }
+
+      localStorage.setItem('situacao', situacao);
+      localStorage.setItem('nome', nome);
+      localStorage.setItem('especie', especie);
+      localStorage.setItem('genero', genero);
+
+      window.location.href = 'cadastro_2.html';
+    });
+
+    // Preencher campos ao voltar
+    window.addEventListener('DOMContentLoaded', () => {
+      const situacao = localStorage.getItem('situacao');
+      if (situacao) {
+        document.querySelector(`input[name="situacao"][value="${situacao}"]`).checked = true;
+      }
+      document.getElementById('nome').value = localStorage.getItem('nome') || '';
+      document.getElementById('especie').value = localStorage.getItem('especie') || '';
+      document.getElementById('genero').value = localStorage.getItem('genero') || '';
+    });
+
+    // Corrigido: botão voltar redireciona para index.html ou página inicial desejada
+    document.querySelector('.voltar').addEventListener('click', () => {
+      window.location.href = 'index.html'; // Altere o nome do arquivo se for outra página inicial
+    });
+  </script>
+</body>
+</html>

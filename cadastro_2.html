@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cadastro de Animal</title>
+  <link rel="stylesheet" href="cadastro_2.css"/>
+</head>
+<body>
+  <div class="container">
+    <img src="Images/Logo.png" alt="Logo" class="logo"/>
+    <img src="Images/Gato.png" alt="Gato" class="img-right"/>
+
+    <div class="form-box">
+      <div class="form-group">
+        <label for="raca">Raça <span style="color: red;">*</span></label>
+        <select id="raca" name="raca">
+          <option value="">Selecione</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="porte">Porte <span style="color: red;">*</span></label>
+        <select id="porte" name="porte">
+          <option value="">Selecione</option>
+          <option value="pequeno">Pequeno</option>
+          <option value="medio">Médio</option>
+          <option value="grande">Grande</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="cor">Cor predominante <span style="color: red;">*</span></label>
+        <select id="cor" name="cor">
+          <option value="">Selecione</option>
+          <option value="preto">Preto</option>
+          <option value="branco">Branco</option>
+          <option value="caramelo">Caramelo</option>
+          <option value="cinza">Cinza</option>
+          <option value="amarelo">Amarelo</option>
+          <option value="marrom">Marrom</option>
+          <option value="laranja">Laranja</option>
+          <option value="bege">Bege</option>
+          <option value="rajado">Rajado</option>
+          <option value="bicolor">Bicolor</option>
+          <option value="tricolor">Tricolor</option>
+          <option value="indefinido">Indefinido</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="olhos">Cor dos olhos <span style="color: red;">*</span></label>
+        <select id="olhos" name="olhos">
+          <option value="">Selecione</option>
+          <option value="verde">Verde</option>
+          <option value="azul">Azul</option>
+          <option value="castanho">Castanho</option>
+          <option value="mel">Mel</option>
+          <option value="cinza">Cinza</option>
+          <option value="ambar">Âmbar</option>
+          <option value="heterocromia">Heterocromia</option>
+          <option value="indefinido">Indefinido</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="data">Data <span style="color: red;">*</span></label>
+        <input type="date" id="data" name="data" />
+      </div>
+
+      <div class="form-group">
+        <label for="estado">Estado <span style="color: red;">*</span></label>
+        <select id="estado" name="estado">
+          <option value="">Selecione</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="municipio">Município <span style="color: red;">*</span></label>
+        <select id="municipio" name="municipio">
+          <option value="">Selecione</option>
+        </select>
+      </div>
+
+      <div class="buttons">
+        <button class="btn voltar">Voltar</button>
+        <button class="btn continuar">Continuar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.querySelector('.voltar').addEventListener('click', () => {
+      window.location.href = 'cadastro.html';
+    });
+
+    document.querySelector('.continuar').addEventListener('click', () => {
+      const campos = ['raca', 'porte', 'cor', 'olhos', 'data', 'estado', 'municipio'];
+      const algumVazio = campos.some(id => !document.getElementById(id).value);
+
+      if (algumVazio) {
+        alert("Todos os campos são obrigatórios. Por favor, preencha todos antes de continuar.");
+        return;
+      }
+
+      // Salvar no localStorage
+      campos.forEach(id => {
+        localStorage.setItem(id, document.getElementById(id).value);
+      });
+
+      window.location.href = 'cadastro_3.html';
+    });
+
+    const estadoSelect = document.getElementById("estado");
+    const municipioSelect = document.getElementById("municipio");
+
+    fetch("https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome")
+      .then(res => res.json())
+      // Após carregar estados, verificar se há estado salvo e restaurar município
+.then(estados => {
+  estados.forEach(estado => {
+    const option = document.createElement("option");
+    option.value = estado.id;
+    option.textContent = estado.nome;
+    estadoSelect.appendChild(option);
+  });
+
+  const estadoSalvo = localStorage.getItem('estado');
+  if (estadoSalvo) {
+    estadoSelect.value = estadoSalvo;
+
+    // Forçar carregar os municípios do estado salvo
+    fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estadoSalvo}/municipios`)
+      .then(res => res.json())
+      .then(municipios => {
+        municipios.forEach(municipio => {
+          const option = document.createElement("option");
+          option.value = municipio.nome;
+          option.textContent = municipio.nome;
+          municipioSelect.appendChild(option);
+        });
+
+        const municipioSalvo = localStorage.getItem('municipio');
+        if (municipioSalvo) {
+          municipioSelect.value = municipioSalvo;
+        }
+      });
+  }
+});
+
+
+    // Popular raça
+    const especie = localStorage.getItem('especie');
+    const racaSelect = document.getElementById('raca');
+    const racasPorEspecie = {
+      cachorro: ['Vira-lata', 'Poodle', 'Labrador', 'Bulldog', 'Golden Retriever', 'Shih Tzu', 'Chihuahua', 'Pastor Alemão', 'Beagle', 'Dálmata', 'Desconhecida'],
+      gato: ['Siamês', 'Persa', 'Angorá', 'Vira-lata', 'Maine Coon', 'Sphynx', 'Bengal', 'Ragdoll', 'British Shorthair', 'Abissínio', 'Desconhecida'],
+      passaro: ['Canário', 'Papagaio', 'Periquito', 'Calopsita', 'Arara', 'Curió', 'Coleiro', 'Trinca-ferro', 'Jandaia', 'Tucano', 'Desconhecida']
+    };
+
+    if (especie && racasPorEspecie[especie]) {
+      racasPorEspecie[especie].forEach(raca => {
+        const option = document.createElement('option');
+        option.value = raca.toLowerCase();
+        option.textContent = raca;
+        racaSelect.appendChild(option);
+      });
+
+      const racaSalva = localStorage.getItem('raca');
+      if (racaSalva) racaSelect.value = racaSalva;
+    }
+
+    // Repor valores ao voltar
+    ['porte', 'cor', 'olhos', 'data'].forEach(id => {
+      document.getElementById(id).value = localStorage.getItem(id) || '';
+    });
+  </script>
+</body>
+</html>
