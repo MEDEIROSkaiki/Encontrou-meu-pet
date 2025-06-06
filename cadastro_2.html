@@ -90,64 +90,55 @@
   </div>
 
   <script>
-    document.querySelector('.voltar').addEventListener('click', () => {
-      window.location.href = 'cadastro.html';
-    });
-
-    document.querySelector('.continuar').addEventListener('click', () => {
-      const campos = ['raca', 'porte', 'cor', 'olhos', 'data', 'estado', 'municipio'];
-      const algumVazio = campos.some(id => !document.getElementById(id).value);
-
-      if (algumVazio) {
-        alert("Todos os campos são obrigatórios. Por favor, preencha todos antes de continuar.");
-        return;
-      }
-
-      // Salvar no localStorage
-      campos.forEach(id => {
-        localStorage.setItem(id, document.getElementById(id).value);
-      });
-
-      window.location.href = 'cadastro_3.html';
-    });
-
     const estadoSelect = document.getElementById("estado");
     const municipioSelect = document.getElementById("municipio");
 
+    // Função que carrega os municípios do estado selecionado
+    function carregarMunicipios(estadoId) {
+      municipioSelect.innerHTML = '<option value="">Selecione</option>';
+      fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estadoId}/municipios`)
+        .then(res => res.json())
+        .then(municipios => {
+          municipios.forEach(municipio => {
+            const option = document.createElement("option");
+            option.value = municipio.nome;
+            option.textContent = municipio.nome;
+            municipioSelect.appendChild(option);
+          });
+
+          const municipioSalvo = localStorage.getItem('municipio');
+          if (municipioSalvo) {
+            municipioSelect.value = municipioSalvo;
+          }
+        });
+    }
+
+    // Carrega estados
     fetch("https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome")
       .then(res => res.json())
-      // Após carregar estados, verificar se há estado salvo e restaurar município
-.then(estados => {
-  estados.forEach(estado => {
-    const option = document.createElement("option");
-    option.value = estado.id;
-    option.textContent = estado.nome;
-    estadoSelect.appendChild(option);
-  });
-
-  const estadoSalvo = localStorage.getItem('estado');
-  if (estadoSalvo) {
-    estadoSelect.value = estadoSalvo;
-
-    // Forçar carregar os municípios do estado salvo
-    fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estadoSalvo}/municipios`)
-      .then(res => res.json())
-      .then(municipios => {
-        municipios.forEach(municipio => {
+      .then(estados => {
+        estados.forEach(estado => {
           const option = document.createElement("option");
-          option.value = municipio.nome;
-          option.textContent = municipio.nome;
-          municipioSelect.appendChild(option);
+          option.value = estado.id;
+          option.textContent = estado.nome;
+          estadoSelect.appendChild(option);
         });
 
-        const municipioSalvo = localStorage.getItem('municipio');
-        if (municipioSalvo) {
-          municipioSelect.value = municipioSalvo;
+        const estadoSalvo = localStorage.getItem('estado');
+        if (estadoSalvo) {
+          estadoSelect.value = estadoSalvo;
+          carregarMunicipios(estadoSalvo);
         }
       });
-  }
-});
 
+    // Quando o estado muda, carrega municípios
+    estadoSelect.addEventListener('change', () => {
+      const estadoId = estadoSelect.value;
+      if (estadoId) {
+        localStorage.setItem('estado', estadoId);
+        carregarMunicipios(estadoId);
+      }
+    });
 
     // Popular raça
     const especie = localStorage.getItem('especie');
@@ -173,6 +164,26 @@
     // Repor valores ao voltar
     ['porte', 'cor', 'olhos', 'data'].forEach(id => {
       document.getElementById(id).value = localStorage.getItem(id) || '';
+    });
+
+    document.querySelector('.voltar').addEventListener('click', () => {
+      window.location.href = 'cadastro.html';
+    });
+
+    document.querySelector('.continuar').addEventListener('click', () => {
+      const campos = ['raca', 'porte', 'cor', 'olhos', 'data', 'estado', 'municipio'];
+      const algumVazio = campos.some(id => !document.getElementById(id).value);
+
+      if (algumVazio) {
+        alert("Todos os campos são obrigatórios. Por favor, preencha todos antes de continuar.");
+        return;
+      }
+
+      campos.forEach(id => {
+        localStorage.setItem(id, document.getElementById(id).value);
+      });
+
+      window.location.href = 'cadastro_3.html';
     });
   </script>
 </body>
