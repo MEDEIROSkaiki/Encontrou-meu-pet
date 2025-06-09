@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cadastro de Usuário</title>
+  <link rel="stylesheet" href="cadastro_pet.css" />
+</head>
+<body>
+  <div class="container">
+    <img src="Images/Logo.png" alt="Logo" class="logo" />
+    <img src="Images/Cachorro e gato2.png" alt="Decoração" class="img-top-right" />
+
+    <div class="form-box">
+      <h2 class="form-title">Criar Conta</h2>
+
+      <div class="form-group">
+        <label for="nome">Nome completo <span class="required">*</span></label>
+        <input type="text" id="nome" name="nome" placeholder="Digite seu nome">
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email <span class="required">*</span></label>
+        <input type="email" id="email" name="email" placeholder="Digite seu email">
+      </div>
+
+      <div class="form-group">
+        <label for="senha">Senha <span class="required">*</span></label>
+        <input type="password" id="senha" name="senha" placeholder="Crie uma senha">
+      </div>
+
+      <div class="form-group">
+        <label for="confirmar">Confirmar Senha <span class="required">*</span></label>
+        <input type="password" id="confirmar" name="confirmar" placeholder="Confirme sua senha">
+      </div>
+
+      <div class="buttons">
+        <button class="btn voltar" onclick="window.location.href='index.html'">Voltar</button>
+        <button class="btn cadastrar">Cadastrar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.querySelector('.cadastrar').addEventListener('click', () => {
+      const nome = document.getElementById('nome').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const senha = document.getElementById('senha').value;
+      const confirmar = document.getElementById('confirmar').value;
+
+      if (!nome || !email || !senha || !confirmar) {
+        alert('Preencha todos os campos obrigatórios.');
+        return;
+      }
+
+      if (senha !== confirmar) {
+        alert('As senhas não coincidem.');
+        return;
+      }
+
+      // Aqui você pode enviar os dados para o backend ou salvar no localStorage
+      alert('Cadastro realizado com sucesso!');
+      window.location.href = 'login.html';
+    });
+  </script>
+</body>
+</html>
