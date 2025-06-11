@@ -1,0 +1,4 @@
+# Framework web principal
+Flask
+# Conexão com bancos via ODBC (ex: SQL Server)
+pyodbc
