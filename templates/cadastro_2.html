@@ -4,12 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Cadastro de Animal</title>
-  <link rel="stylesheet" href="cadastro_2.css"/>
+  <link rel="stylesheet" href="/static/cadastro_2.css"/>
 </head>
 <body>
   <div class="container">
-    <img src="Images/Logo.png" alt="Logo" class="logo"/>
-    <img src="Images/Gato.png" alt="Gato" class="img-right"/>
+    <img src="static/Images/Logo.png" alt="Logo" class="logo"/>
+    <img src="static/Images/Gato.png" alt="Gato" class="img-right"/>
 
     <div class="form-box">
       <div class="form-group">
@@ -143,23 +143,41 @@
     // Popular raça
     const especie = localStorage.getItem('especie');
     const racaSelect = document.getElementById('raca');
-    const racasPorEspecie = {
-      cachorro: ['Vira-lata', 'Poodle', 'Labrador', 'Bulldog', 'Golden Retriever', 'Shih Tzu', 'Chihuahua', 'Pastor Alemão', 'Beagle', 'Dálmata', 'Desconhecida'],
-      gato: ['Siamês', 'Persa', 'Angorá', 'Vira-lata', 'Maine Coon', 'Sphynx', 'Bengal', 'Ragdoll', 'British Shorthair', 'Abissínio', 'Desconhecida'],
-      passaro: ['Canário', 'Papagaio', 'Periquito', 'Calopsita', 'Arara', 'Curió', 'Coleiro', 'Trinca-ferro', 'Jandaia', 'Tucano', 'Desconhecida']
-    };
-
-    if (especie && racasPorEspecie[especie]) {
-      racasPorEspecie[especie].forEach(raca => {
+    // const racasPorEspecie = {
+    //   cachorro: ['Vira-lata', 'Poodle', 'Labrador', 'Bulldog', 'Golden Retriever', 'Shih Tzu', 'Chihuahua', 'Pastor Alemão', 'Beagle', 'Dálmata', 'Desconhecida'],
+    //   gato: ['Siamês', 'Persa', 'Angorá', 'Vira-lata', 'Maine Coon', 'Sphynx', 'Bengal', 'Ragdoll', 'British Shorthair', 'Abissínio', 'Desconhecida'],
+    //   passaro: ['Canário', 'Papagaio', 'Periquito', 'Calopsita', 'Arara', 'Curió', 'Coleiro', 'Trinca-ferro', 'Jandaia', 'Tucano', 'Desconhecida']
+    // };
+   fetch('/racas')
+  .then(res => res.json())
+  .then(racas => {
+    racaSelect.innerHTML = '<option value="">Selecione</option>';
+    racas.forEach(raca => {
+      // Mapeia a espécie conforme os valores do banco
+      const especieMap = { cachorro: 1, gato: 2, passaro: 3 };
+      //if (especieMap[especie] === raca.idespecie) {
         const option = document.createElement('option');
-        option.value = raca.toLowerCase();
-        option.textContent = raca;
+        option.value = raca.nome.toLowerCase();
+        option.textContent = raca.nome;
         racaSelect.appendChild(option);
-      });
+      //}
+    });
 
-      const racaSalva = localStorage.getItem('raca');
-      if (racaSalva) racaSelect.value = racaSalva;
-    }
+    const racaSalva = localStorage.getItem('raca');
+    if (racaSalva) racaSelect.value = racaSalva;
+  });
+
+    // if (especie && racasPorEspecie[especie]) {
+    //   racasPorEspecie[especie].forEach(raca => {
+    //     const option = document.createElement('option');
+    //     option.value = raca.toLowerCase();
+    //     option.textContent = raca;
+    //     racaSelect.appendChild(option);
+    //   });
+
+    //   const racaSalva = localStorage.getItem('raca');
+    //   if (racaSalva) racaSelect.value = racaSalva;
+    // }
 
     // Repor valores ao voltar
     ['porte', 'cor', 'olhos', 'data'].forEach(id => {
@@ -185,6 +203,11 @@
 
       window.location.href = 'cadastro_3.html';
     });
+
+//const racaSelect = document.getElementById('raca');
+//const especie = localStorage.getItem('especie'); // cachorro, gato, passaro
+
+
   </script>
 </body>
 </html>
