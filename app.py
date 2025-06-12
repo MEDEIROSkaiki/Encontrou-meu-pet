@@ -4,6 +4,10 @@
 from flask import Flask,jsonify, request, render_template
 from db.racas_db import get_racas_por_id_especie
 from db.especies_db import get_all_especies
+from db.generos_db import get_all_generos
+from db.portes_db import get_all_portes
+from db.situacoes_db import get_all_situacoes
+from db.usuario_db import email_existente, adicionar_usuario
 
 # Cria uma instância da aplicação Flask
 app = Flask(__name__)
@@ -20,6 +24,25 @@ def login():
 @app.route('/cadastrar')
 def cadastrar():
     return render_template('cadastro_usuario.html')
+
+@app.route('/cadastrar', methods=['POST'])
+def adicionar_usuario_route():
+    data = request.get_json()
+    nome = data.get('nome', '').strip()
+    email = data.get('email', '').strip()
+    senha = data.get('senha', '')
+    confirmar = data.get('confirmar', '')
+
+    if senha != confirmar:
+        return jsonify({'status': 'erro', 'mensagem': 'Senhas não conferem'})
+
+    if email_existente(email):
+        return jsonify({'status': 'erro', 'mensagem': 'E-mail já cadastrado'})
+
+    adicionar_usuario(nome, email, senha)
+    return jsonify({'status': 'sucesso', 'mensagem': 'Usuário cadastrado com sucesso!'})
+
+    return render_template('cadastro_criado.html')
 
 @app.route('/pesquisa')
 def pesquisa():
@@ -42,6 +65,33 @@ def get_all_especies_route():
     
     except Exception as e:
         return jsonify({'erro': str(e)}), 500  
+    
+@app.route('/anunciar/get_all_generos')
+def get_all_generos_route():
+    try:
+        generos = get_all_generos()
+        return jsonify(generos)
+    
+    except Exception as e:
+        return jsonify({'erro': str(e)}), 500   
+
+@app.route('/anunciar/get_all_portes')
+def get_all_portes_route():
+    try:
+        portes = get_all_portes()
+        return jsonify(portes)
+    
+    except Exception as e:
+        return jsonify({'erro': str(e)}), 500     
+
+@app.route('/anunciar/get_all_situacoes')
+def get_all_situacoes_route():
+    try:
+        situacoes = get_all_situacoes()
+        return jsonify(situacoes)
+    
+    except Exception as e:
+        return jsonify({'erro': str(e)}), 500           
 
 @app.route('/racas', methods=['POST'])    
 def get_racas_por_id_especie_route():

@@ -86,9 +86,24 @@
           return;
         }
 
-        // Aqui você pode enviar os dados para o backend ou salvar no localStorage
-        alert("Cadastro realizado com sucesso!");
-        window.location.href = "login.html";
+        const dados = {
+          nome: nome,
+          email: email,
+          senha: senha,
+          confirmar: confirmar
+        };
+      fetch('/cadastrar', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(dados)
+        })
+        .then(res => res.json())
+        .then(data => {
+          alert(data.mensagem); // ou exibir no HTML
+        })
+        .catch(err => {
+          alert("Erro na requisição");
+        });
       });
     </script>
   </body>

@@ -2,3 +2,5 @@
 Flask
 # Conexão com bancos via ODBC (ex: SQL Server)
 pyodbc
+# Variaveis de ambiente
+python-dotenv
