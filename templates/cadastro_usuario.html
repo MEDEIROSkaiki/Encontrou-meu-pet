@@ -5,6 +5,140 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cadastro de Usuário</title>
     <link rel="stylesheet" href="/static/css/cadastro_usuario.css" />
+    <style>
+      /* Estilos para os campos readonly */
+      .form-group input[readonly] {
+        background-color: #e9ecef; /* Um tom mais escuro */
+        cursor: not-allowed;
+      }
+
+      /* Estilos para as bordas de feedback */
+      .form-group input.cep-incomplete {
+        border: 1px solid #ffc107; /* Amarelo */
+      }
+      .form-group input.cep-incomplete:focus {
+        border-color: #ffc107; /* Amarelo */
+        box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25); /* Opcional: Adiciona uma sombra para um feedback de foco mais suave */
+      }
+      .form-group input.cep-success {
+        border: 1px solid #28a745; /* Verde */
+      }
+      .form-group input.cep-error {
+        border: 1px solid #dc3545; /* Vermelho */
+      }
+
+      /* Estilo para o indicador de processamento */
+      .form-group.processing input {
+        background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23000" d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" opacity=".3"/><path fill="%23000" d="M12 2A10 10 0 0 1 22 12H2A10 10 0 0 0 12 2Z"><animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur="1s" repeatCount="indefinite"/></path></svg>');
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        background-size: 20px;
+      }
+
+      /* Esconder a div de informações do endereço inicialmente */
+      #endereco-info-container {
+        display: none;
+      }
+
+      /* Estilos do modal "Não sei meu CEP" */
+      .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1000; /* Sit on top, acima de outros elementos */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgba(0, 0, 0, 0.6); /* Black w/ more opacity */
+        align-items: center; /* Centralizar verticalmente */
+        justify-content: center; /* Centralizar horizontalmente */
+      }
+
+      /* Removendo .modal-content e usando .container do modal */
+      .modal .container {
+        background-color: transparent; /* O background ficará no form-box */
+        padding: 0;
+        box-shadow: none;
+        max-width: 90%; /* Ajuste o tamanho máximo se necessário */
+        position: relative; /* Para posicionar o botão de fechar */
+        display: flex; /* Para que a imagem de cima direita se posicione corretamente */
+        justify-content: center; /* Centraliza o form-box no container do modal */
+        align-items: center; /* Centraliza verticalmente o form-box */
+        height: auto; /* Permite que o container se ajuste ao conteúdo */
+      }
+
+      /* Ajuste para a logo dentro do modal, se necessário */
+      .modal .logo {
+        position: absolute; /* Para não interferir no layout flex do form-box */
+        top: 20px;
+        left: 20px;
+        z-index: 1001; /* Acima de outros elementos visuais do modal */
+      }
+
+      /* Ajuste para a imagem de topo direita dentro do modal */
+      .modal .img-top-right {
+        position: absolute; /* Para não interferir no layout flex do form-box */
+        top: 0;
+        right: 0;
+        z-index: 1001;
+      }
+
+      .modal .form-box {
+        position: relative; /* Para o botão de fechar */
+        background-color: #fefefe;
+        padding: 40px; /* Aumenta o padding para melhor espaçamento */
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        width: 100%;
+        max-width: 450px; /* Mesma largura do formulário principal, ajuste se for diferente */
+      }
+
+      .close-button {
+        color: #aaa;
+        position: absolute; /* Posição absoluta dentro do .form-box */
+        top: 10px;
+        right: 20px;
+        font-size: 36px; /* Aumenta o tamanho para destaque */
+        font-weight: bold;
+        cursor: pointer;
+        z-index: 1002; /* Acima de outros elementos do form-box */
+      }
+
+      .close-button:hover,
+      .close-button:focus {
+        color: #333;
+        text-decoration: none;
+      }
+
+      /* Estilo para a lista de sugestões de logradouro */
+      .logradouro-suggestions {
+        border: 1px solid #ccc;
+        max-height: 150px;
+        overflow-y: auto;
+        margin-top: 5px;
+        list-style: none;
+        padding: 0;
+        background-color: #fff; /* Fundo branco para as sugestões */
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .logradouro-suggestions li {
+        padding: 8px 10px;
+        cursor: pointer;
+        font-size: 0.95em;
+      }
+
+      .logradouro-suggestions li:hover {
+        background-color: #f0f0f0;
+      }
+      .modal h3.form-title {
+        /* Adiciona estilo para o título do modal */
+        margin-bottom: 25px;
+        color: #333;
+      }
+    </style>
   </head>
   <body>
     <div class="container">
@@ -18,15 +152,30 @@
       <div class="form-box">
         <h2 class="form-title">Criar Conta</h2>
 
+        <div class="form-group" style="display: none">
+          <label for="idUsuario">ID do Usuário</label>
+          <input type="hidden" id="idUsuario" name="idUsuario" />
+        </div>
+
         <div class="form-group">
-          <label for="nome"
-            >Nome completo <span class="required">*</span></label
-          >
+          <label for="nome">Nome <span class="required">*</span></label>
           <input
             type="text"
             id="nome"
             name="nome"
             placeholder="Digite seu nome"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="sobrenome"
+            >Sobrenome <span class="required">*</span></label
+          >
+          <input
+            type="text"
+            id="sobrenome"
+            name="sobrenome"
+            placeholder="Digite seu sobrenome"
           />
         </div>
 
@@ -38,6 +187,109 @@
             name="email"
             placeholder="Digite seu email"
           />
+        </div>
+        <div class="form-group">
+          <label for="ddd">DDD</label>
+          <input
+            type="text"
+            id="ddd"
+            name="ddd"
+            placeholder="Ex: 11"
+            maxlength="2"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="telefone">Telefone</label>
+          <input
+            type="text"
+            id="telefone"
+            name="telefone"
+            placeholder="Ex: 987654321"
+            maxlength="9"
+          />
+        </div>
+
+        <div class="form-group" id="cep-group">
+          <label for="cep">CEP</label>
+          <input
+            type="text"
+            id="cep"
+            name="cep"
+            placeholder="Ex: 00000-000"
+            maxlength="9"
+            onkeyup="formatarCEP(this);"
+            onblur="buscarCEP(this.value)"
+          />
+          <a href="#" id="nao-sei-cep" style="font-size: 0.9em"
+            >Não sei meu CEP</a
+          >
+        </div>
+
+        <div id="endereco-info-container">
+          <div class="form-group">
+            <label for="endereco">Endereço</label>
+            <input
+              type="text"
+              id="endereco"
+              name="endereco"
+              placeholder="Digite seu endereço"
+              readonly
+            />
+          </div>
+          <div class="form-group">
+            <label for="numero">Número</label>
+            <input
+              type="text"
+              id="numero"
+              name="numero"
+              placeholder="Ex: 123"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="complemento">Complemento</label>
+            <input
+              type="text"
+              id="complemento"
+              name="complemento"
+              placeholder="Ex: Apartamento 101"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="bairro">Bairro</label>
+            <input
+              type="text"
+              id="bairro"
+              name="bairro"
+              placeholder="Digite seu bairro"
+              readonly
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="cidade">Cidade</label>
+            <input
+              type="text"
+              id="cidade"
+              name="cidade"
+              placeholder="Digite sua cidade"
+              readonly
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="estado">Estado</label>
+            <input
+              type="text"
+              id="estado"
+              name="estado"
+              placeholder="Ex: SP"
+              maxlength="2"
+              readonly
+            />
+          </div>
         </div>
 
         <div class="form-group">
@@ -69,42 +321,49 @@
       </div>
     </div>
 
-    <script>
-      document.querySelector(".cadastrar").addEventListener("click", () => {
-        const nome = document.getElementById("nome").value.trim();
-        const email = document.getElementById("email").value.trim();
-        const senha = document.getElementById("senha").value;
-        const confirmar = document.getElementById("confirmar").value;
+    <div id="modal-nao-sei-cep" class="modal">
+      <div class="container">
+        <img src="/static/img/Logo.png" alt="Logo" class="logo" />
+        <img
+          src="/static/img/Cachorro e gato2.png"
+          alt="Decoração"
+          class="img-top-right"
+        />
 
-        if (!nome || !email || !senha || !confirmar) {
-          alert("Preencha todos os campos obrigatórios.");
-          return;
-        }
-
-        if (senha !== confirmar) {
-          alert("As senhas não coincidem.");
-          return;
-        }
-
-        const dados = {
-          nome: nome,
-          email: email,
-          senha: senha,
-          confirmar: confirmar
-        };
-      fetch('/cadastrar', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(dados)
-        })
-        .then(res => res.json())
-        .then(data => {
-          alert(data.mensagem); // ou exibir no HTML
-        })
-        .catch(err => {
-          alert("Erro na requisição");
-        });
-      });
-    </script>
+        <div class="form-box">
+          <span class="close-button">&times;</span>
+          <h2 class="form-title">Buscar CEP por Endereço</h2>
+          <div class="form-group">
+            <label for="uf-select">Estado:</label>
+            <select id="uf-select" class="form-control">
+              <option value="">Selecione um estado</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="municipio-select">Município:</label>
+            <select id="municipio-select" class="form-control" disabled>
+              <option value="">Selecione um município</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="logradouro-input">Logradouro:</label>
+            <input
+              type="text"
+              id="logradouro-input"
+              class="form-control"
+              placeholder="Digite o logradouro"
+              disabled
+            />
+            <ul id="logradouro-suggestions" class="logradouro-suggestions"></ul>
+          </div>
+          <div class="buttons">
+            <button id="buscar-cep-endereco" class="btn cadastrar">
+              Buscar CEP
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/static/js/cadastro_usuario.js"></script>
   </body>
 </html>
