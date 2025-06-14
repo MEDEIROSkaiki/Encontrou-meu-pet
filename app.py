@@ -1,7 +1,7 @@
 
 # Importa as bibliotecas necessárias
 # Flask é o microframework para web e pyodbc é usado para conectar ao SQL Server
-from flask import Flask,jsonify, request, render_template
+from flask import Flask,jsonify, request, redirect, url_for, render_template
 from db.racas_db import get_racas_por_id_especie
 from db.especies_db import get_all_especies
 from db.generos_db import get_all_generos
@@ -17,6 +17,18 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')  # Mostra a página com o formulário de entrada
 
+@app.route('/login', methods=['POST'])
+def login_post():
+    email = request.form.get('email')
+    senha = request.form.get('senha')
+
+    # Aqui você pode fazer a lógica de autenticação
+    print(f"Email: {email}")
+    print(f"Senha: {senha}")
+
+    # Exemplo de redirecionamento após o login
+    return redirect(url_for('alguma_rota'))
+
 @app.route('/login')
 def login():
     return render_template('login.html')
@@ -29,9 +41,18 @@ def cadastrar():
 def adicionar_usuario_route():
     data = request.get_json()
     nome = data.get('nome', '').strip()
+    sobrenome = data.get('sobrenome', '')
     email = data.get('email', '').strip()
     senha = data.get('senha', '')
     confirmar = data.get('confirmar', '')
+    ddd = data.get('ddd', '')
+    telefone = data.get('telefone', '')
+    endereco = data.get('endereco', '')
+    numero = data.get('numero', '')
+    complemento = data.get('complemento', '')
+    bairro = data.get('bairro', '')
+    cidade = data.get('cidade', '')
+    estado = data.get('estado', '')
 
     if senha != confirmar:
         return jsonify({'status': 'erro', 'mensagem': 'Senhas não conferem'})
@@ -39,7 +60,7 @@ def adicionar_usuario_route():
     if email_existente(email):
         return jsonify({'status': 'erro', 'mensagem': 'E-mail já cadastrado'})
 
-    adicionar_usuario(nome, email, senha)
+    adicionar_usuario(nome, sobrenome, email, senha, ddd, telefone, endereco, numero,complemento,bairro, cidade, estado )
     return jsonify({'status': 'sucesso', 'mensagem': 'Usuário cadastrado com sucesso!'})
 
     return render_template('cadastro_criado.html')

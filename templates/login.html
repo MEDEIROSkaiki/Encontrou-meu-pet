@@ -14,25 +14,24 @@
         alt="Gato olhando"
         class="img-top-right"
       />
+<form action="/login" method="POST">
+  <div class="form-box">
+    <div class="form-group">
+      <label for="email">Email</label><br />
+      <input type="text" id="email" name="email" />
+    </div>
 
-      <div class="form-box">
-        <div class="form-group">
-          <label for="email">Email</label><br />
-          <input type="text" id="email" name="email" />
-        </div>
+    <div class="form-group">
+      <label for="senha">Senha</label><br />
+      <input type="password" id="senha" name="senha" />
+    </div>
 
-        <div class="form-group">
-          <label for="senha">Senha</label><br />
-          <input type="password" id="senha" name="senha" />
-        </div>
-
-        <div class="buttons">
-          <button class="btn login">Login</button>
-          <a href="/cadastrar"
-            ><button class="btn cadastrar">Cadastrar</button>
-          </a>
-        </div>
-      </div>
+    <div class="buttons">
+      <button type="submit" class="btn login">Login</button>
+      <a href="/cadastrar" class="btn cadastrar">Cadastrar</a>
+    </div>
+  </div>
+</form>
     </div>
   </body>
 </html>
