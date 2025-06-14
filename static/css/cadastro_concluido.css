@@ -1,0 +1,39 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f3d1ea;
+    font-family: 'Arial', sans-serif;
+}
+
+.container {
+    text-align: center;
+    padding-top: 15%;
+    position: relative;
+}
+
+.logo {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 100px;
+}
+
+
+h1 {
+    font-size: 4.5rem;
+    font-weight: bold;
+    color: #000;
+    font-family: 'Courier New', monospace;
+    margin-bottom: 40px;
+}
+
+.botao {
+    background-color: #5c4dc0;
+    color: white;
+    text-decoration: none;
+    padding: 12px 25px;
+    border-radius: 15px;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+

@@ -57,6 +57,10 @@ def enviar():
 def anunciar_cadastro():
     return render_template('cadastro/cadastro.html')
 
+@app.route('/anunciar/cadastro2')
+def anunciar_cadastro2():
+    return render_template('cadastro/cadastro_2.html')
+
 @app.route('/anunciar/get_all_especies')
 def get_all_especies_route():
     try:
@@ -111,4 +115,31 @@ def get_racas_por_id_especie_route():
 # Inicia o servidor Flask em modo debug
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+
+
+
+
+@app.route('/cadastrar_animal', methods=['POST'])
+def cadastrar_animal():
+    data = request.get_json()
+
+    raca = data.get('raca', '').strip()
+    porte = data.get('porte', '').strip()
+    situacao = data.get('situacao', '').strip()
+    genero = data.get('genero', '').strip()
+    especie = data.get('especie', '').strip()
+
+    # Validação simples
+    if not all([raca, porte, situacao, genero, especie]):
+        return jsonify({'erro': 'Todos os campos são obrigatórios.'}), 400
+
+    # Aqui você pode adicionar lógica para salvar no banco, por exemplo
+    # salvar_animal_no_banco(raca, porte, situacao, genero, especie)
+
+    return jsonify({'mensagem': 'Animal cadastrado com sucesso!'}), 200
+
+
+
 

@@ -62,8 +62,8 @@
         </div>
 
         <div class="buttons">
-          <button class="btn voltar">Voltar</button>
-          <button class="btn continuar">Continuar</button>
+          <a href="/"><button class="btn voltar">Voltar</button></a>
+          <a href="/anunciar/cadastro2"><button class="btn continuar">Continuar</button></a>
         </div>
       </div>
     </div>
@@ -90,7 +90,7 @@
         localStorage.setItem("especie", especie);
         localStorage.setItem("genero", genero);
 
-        window.location.href = "cadastro_2.html";
+        window.location.href = "/anunciar/cadastro2";
       });
 
       // Preencher campos ao voltar

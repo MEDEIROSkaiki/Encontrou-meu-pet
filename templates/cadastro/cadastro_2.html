@@ -4,12 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Cadastro de Animal</title>
-  <link rel="stylesheet" href="/static/cadastro_2.css"/>
+  <link rel="stylesheet" href="/static/css/cadastro_2.css"/>
 </head>
 <body>
   <div class="container">
-    <img src="static/Images/Logo.png" alt="Logo" class="logo"/>
-    <img src="static/Images/Gato.png" alt="Gato" class="img-right"/>
+    <img src="/static/img//Logo.png" alt="Logo" class="logo" />
+    <img src="/static/img/Gato.png" alt="Gato" class="img-right"/>
 
     <div class="form-box">
       <div class="form-group">
@@ -23,9 +23,6 @@
         <label for="porte">Porte <span style="color: red;">*</span></label>
         <select id="porte" name="porte">
           <option value="">Selecione</option>
-          <option value="pequeno">Pequeno</option>
-          <option value="medio">Médio</option>
-          <option value="grande">Grande</option>
         </select>
       </div>
 
@@ -208,6 +205,9 @@
 //const especie = localStorage.getItem('especie'); // cachorro, gato, passaro
 
 
+  </script>
+  <script src="/static/js/cadastro_2.js"> 
+    
   </script>
 </body>
 </html>
