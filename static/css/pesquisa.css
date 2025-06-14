@@ -2,7 +2,7 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background-color: #FCEFF9; /* Cor de fundo rosa/lilás claro */
+    background-color: #f8cdef; /* Cor de fundo rosa/lilás claro */
     color: #333;
 }
 
@@ -20,8 +20,8 @@ body {
 }
 
 .btn-voltar {
-    background-color: #fff;
-    color: #333;
+    background-color: #613ab4;
+    color: #ddd;
     border: 1px solid #ddd;
     border-radius: 20px;
     padding: 10px 25px;
@@ -39,7 +39,7 @@ body {
 
 /* --- PAINEL DE FILTROS (ESQUERDA) --- */
 .filter-panel {
-    background-color: #fff;
+    background-color: #e0afe9;
     border-radius: 15px;
     padding: 25px;
     width: 280px; /* Largura fixa */

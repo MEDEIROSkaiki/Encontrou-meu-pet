@@ -320,6 +320,12 @@ function limparModalBuscaCep() {
   buscarCepEnderecoButton.disabled = true;
 }
 
+function emailValido(email) {
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regex.test(email);
+}
+
+
 // --- Código existente para o botão de cadastro ---
 
 document.querySelector(".cadastrar").addEventListener("click", () => {
@@ -333,8 +339,8 @@ document.querySelector(".cadastrar").addEventListener("click", () => {
   const ddd = document.getElementById("ddd").value.trim();
   const telefone = document.getElementById("telefone").value.trim();
   const endereco = document.getElementById("endereco").value.trim();
-  const complemento = document.getElementById("complemento").value.trim();
   const numero = document.getElementById("numero").value.trim();
+  const complemento = document.getElementById("complemento").value.trim();
   const bairro = document.getElementById("bairro").value.trim();
   const cidade = document.getElementById("cidade").value.trim();
   const estado = document.getElementById("estado").value.trim();
@@ -344,6 +350,21 @@ document.querySelector(".cadastrar").addEventListener("click", () => {
     alert("Preencha todos os campos obrigatórios.");
     return;
   }
+
+  if (!emailValido(email)) {
+  alert("Por favor, insira um email válido.");
+  return;
+}
+
+  if ((!ddd || ddd.length != 2) && (telefone)) {
+  alert("O DDD e o telefone precisam ser válidos.");
+  return;
+}
+
+  if (!estado || !cidade || !bairro) {
+  alert("Por favor, insira um CEP válido.");
+  return;
+}
 
   if (senha !== confirmar) {
     alert("As senhas não coincidem.");
