@@ -1,149 +1,159 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Plataforma para encontrar pets desaparecidos e anunciar animais encontrados. Ajude a reunir famílias com seus pets!" />
-    <title>Encontrou Meu Pet?</title>
-    <link rel="stylesheet" href="/static/css/style.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 
-  </head>
-  <body>
-    <div class="page-container">
-      <header class="main-header">
-        <div class="logo-container">
-          <img src="/static/img/Logo.png" alt="Logo" class="logo" loading="lazy" />
-          <h1>ENCONTROU MEU PET?</h1>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Plataforma para encontrar pets desaparecidos e anunciar animais encontrados. Ajude a reunir famílias com seus pets!" />
+  <title>Encontrou Meu Pet?</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+</head>
+
+<body>
+  <div class="page-container">
+    <header class="main-header">
+      <div class="logo-container">
+        <img src="/static/img/Logo.png" alt="Logo" class="logo" loading="lazy" />
+        <h1>ENCONTROU MEU PET?</h1>
+      </div>
+      <nav class="main-nav">
+        <a href="/anunciar/cadastro" class="btn btn-primary" title="Anunciar um pet">Anunciar</a>
+        {% if session.esta_logado %}
+        <span class="welcome-message">Olá, {{ session.usuario_name }}!</span>
+        <a href="{{ url_for('logout') }}" class="btn btn-secondary" title="Sair da conta">Sair</a>
+        {% else %}
+        <a href="{{ url_for('login') }}" class="btn btn-secondary" title="Fazer login">Login</a>
+        {% endif %}
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero-section">
+        <div class="hero-text">
+          <h2>Aqui você encontra uma forma fácil e rápida de encontrar seu Pet desaparecido ou anunciar um Pet
+            esquecido!</h2>
         </div>
-        <nav class="main-nav">
-          <a href="/anunciar/cadastro" class="btn btn-primary" title="Anunciar um pet">Anunciar</a>
-          <a href="/login" class="btn btn-secondary" title="Fazer login">Login</a>
-        </nav>
-      </header>
+        <div class="hero-image-container">
+          <img src="/static/img/gato_sobre_cachorro.png" alt="Gato em cima de um cachorro" loading="lazy" />
+        </div>
+      </section>
 
-      <main>
-        <section class="hero-section">
-          <div class="hero-text">
-            <h2>Aqui você encontra uma forma fácil e rápida de encontrar seu Pet desaparecido ou anunciar um Pet esquecido!</h2>
-          </div>
-          <div class="hero-image-container">
-            <img src="/static/img/gato_sobre_cachorro.png" alt="Gato em cima de um cachorro" loading="lazy" />
-          </div>
-        </section>
-
-        <section class="pets-carousel-section">
-          <div class="carousel">
-            <h3>Pets desaparecidos</h3>
-            <div class="carousel-track-container">
-              <button class="arrow left-arrow" aria-label="Rolar para a esquerda">&lt;</button>
-              <div class="carousel-track">
-                <div class="pet-card">
-                  <img src="/static/img/img1-removebg-preview.png" alt="Pet 1" loading="lazy" />
-                  <div class="card-overlay-text">Nome: Luna<br>Bairro: Centro<br>Desapareceu: 12/05</div>
-                </div>
-                <div class="pet-card">
-                  <img src="/static/img/img_2.webp" alt="Pet 2" loading="lazy" />
-                  <div class="card-overlay-text">Nome: Thor<br>Bairro: Jardim das Flores<br>Desapareceu: 10/06</div>
-                </div>
-                <div class="pet-card">
-                  <img src="/static/img/img_3.webp" alt="Pet 3" loading="lazy" />
-                  <div class="card-overlay-text">Nome: Mel<br>Bairro: Vila Nova<br>Desapareceu: 05/06</div>
-                </div>
-                <div class="pet-card">
-                  <img src="/static/img/img_4.webp" alt="Pet 4" loading="lazy" />
-                  <div class="card-overlay-text">Nome: Bob<br>Bairro: Alto Alegre<br>Desapareceu: 01/06</div>
-                </div>
-                <div class="pet-card">
-                  <img src="/static/img/img_8.webp" alt="Pet 8" loading="lazy" />
-                  <div class="card-overlay-text">Nome: Nina<br>Bairro: Industrial<br>Desapareceu: 03/06</div>
-                </div>
+      <section class="pets-carousel-section">
+        <div class="carousel">
+          <h3>Pets desaparecidos</h3>
+          <div class="carousel-track-container">
+            <button class="arrow left-arrow" aria-label="Rolar para a esquerda">&lt;</button>
+            <div class="carousel-track">
+              <div class="pet-card">
+                <img src="/static/img/img1-removebg-preview.png" alt="Pet 1" loading="lazy" />
+                <div class="card-overlay-text">Nome: Luna<br>Bairro: Centro<br>Desapareceu: 12/05</div>
               </div>
-              <button class="arrow right-arrow" aria-label="Rolar para a direita">&gt;</button>
-            </div>
-          </div>
-
-          <div class="carousel">
-            <h3>Pets procurando dono</h3>
-            <div class="carousel-track-container">
-              <button class="arrow left-arrow" aria-label="Rolar para a esquerda">&lt;</button>
-              <div class="carousel-track">
-                <div class="pet-card">
-                  <img src="/static/img/img_5.webp" alt="Pet 5" loading="lazy" />
-                  <div class="card-overlay-text">Encontrado: 09/06<br>Bairro: São João</div>
-                </div>
-                <div class="pet-card">
-                  <img src="/static/img/img_6.webp" alt="Pet 6" loading="lazy" />
-                  <div class="card-overlay-text">Encontrado: 06/06<br>Bairro: Centro</div>
-                </div>
-                <div class="pet-card">
-                  <img src="/static/img/img_7.webp" alt="Pet 7" loading="lazy" />
-                  <div class="card-overlay-text">Encontrado: 02/06<br>Bairro: Morada Nova</div>
-                </div>
-                <div class="pet-card">
-                  <img src="/static/img/img_11.webp" alt="Pet 11" loading="lazy" />
-                  <div class="card-overlay-text">Encontrado: 05/06<br>Bairro: Lago Azul</div>
-                </div>
-                <div class="pet-card">
-                  <img src="/static/img/img_12.webp" alt="Pet 12" loading="lazy" />
-                  <div class="card-overlay-text">Encontrado: 08/06<br>Bairro: Nova Esperança</div>
-                </div>
-                <div class="pet-card">
-                  <img src="/static/img/img_13.webp" alt="Pet 13" loading="lazy" />
-                  <div class="card-overlay-text">Encontrado: 12/06<br>Bairro: Jardim América</div>
-                </div>
+              <div class="pet-card">
+                <img src="/static/img/img_2.webp" alt="Pet 2" loading="lazy" />
+                <div class="card-overlay-text">Nome: Thor<br>Bairro: Jardim das Flores<br>Desapareceu: 10/06</div>
               </div>
-              <button class="arrow right-arrow" aria-label="Rolar para a direita">&gt;</button>
+              <div class="pet-card">
+                <img src="/static/img/img_3.webp" alt="Pet 3" loading="lazy" />
+                <div class="card-overlay-text">Nome: Mel<br>Bairro: Vila Nova<br>Desapareceu: 05/06</div>
+              </div>
+              <div class="pet-card">
+                <img src="/static/img/img_4.webp" alt="Pet 4" loading="lazy" />
+                <div class="card-overlay-text">Nome: Bob<br>Bairro: Alto Alegre<br>Desapareceu: 01/06</div>
+              </div>
+              <div class="pet-card">
+                <img src="/static/img/img_8.webp" alt="Pet 8" loading="lazy" />
+                <div class="card-overlay-text">Nome: Nina<br>Bairro: Industrial<br>Desapareceu: 03/06</div>
+              </div>
             </div>
+            <button class="arrow right-arrow" aria-label="Rolar para a direita">&gt;</button>
           </div>
+        </div>
 
-          <a href="/pesquisa" class="btn btn-ver-todos" title="Ver todos os animais cadastrados">Ver todos animais</a>
-        </section>
-
-        <section class="cta-section">
-          <div class="cta-image-container">
-            <img src="/static/img/imagem_pessoa_cachorro.png" alt="Pessoa com um cachorro" loading="lazy" />
+        <div class="carousel">
+          <h3>Pets procurando dono</h3>
+          <div class="carousel-track-container">
+            <button class="arrow left-arrow" aria-label="Rolar para a esquerda">&lt;</button>
+            <div class="carousel-track">
+              <div class="pet-card">
+                <img src="/static/img/img_5.webp" alt="Pet 5" loading="lazy" />
+                <div class="card-overlay-text">Encontrado: 09/06<br>Bairro: São João</div>
+              </div>
+              <div class="pet-card">
+                <img src="/static/img/img_6.webp" alt="Pet 6" loading="lazy" />
+                <div class="card-overlay-text">Encontrado: 06/06<br>Bairro: Centro</div>
+              </div>
+              <div class="pet-card">
+                <img src="/static/img/img_7.webp" alt="Pet 7" loading="lazy" />
+                <div class="card-overlay-text">Encontrado: 02/06<br>Bairro: Morada Nova</div>
+              </div>
+              <div class="pet-card">
+                <img src="/static/img/img_11.webp" alt="Pet 11" loading="lazy" />
+                <div class="card-overlay-text">Encontrado: 05/06<br>Bairro: Lago Azul</div>
+              </div>
+              <div class="pet-card">
+                <img src="/static/img/img_12.webp" alt="Pet 12" loading="lazy" />
+                <div class="card-overlay-text">Encontrado: 08/06<br>Bairro: Nova Esperança</div>
+              </div>
+              <div class="pet-card">
+                <img src="/static/img/img_13.webp" alt="Pet 13" loading="lazy" />
+                <div class="card-overlay-text">Encontrado: 12/06<br>Bairro: Jardim América</div>
+              </div>
+            </div>
+            <button class="arrow right-arrow" aria-label="Rolar para a direita">&gt;</button>
           </div>
-          <div class="cta-text">
-            <h2>Ajude milhares de pets a encontrar seus donos!</h2>
-            <a href="/anunciar/cadastro" class="btn btn-primary" title="Anuncie um animal perdido">Anunciar</a>
-          </div>
-        </section>
-      </main>
-
-      <footer class="main-footer">
-        <div class="footer-links">
-          <a href="#">Termos de uso</a>
-          <a href="#">Política de Privacidade</a>
-          <a href="#">Home</a>
         </div>
-        <div class="footer-info">
-          <p>EncontreSeuPetOficial@gmail.com</p>
-          <p>Team Mavericks Ltda. | CNPJ: 00.123.456/0001-00</p>
+
+        <a href="/pesquisa" class="btn btn-ver-todos" title="Ver todos os animais cadastrados">Ver todos animais</a>
+      </section>
+
+      <section class="cta-section">
+        <div class="cta-image-container">
+          <img src="/static/img/imagem_pessoa_cachorro.png" alt="Pessoa com um cachorro" loading="lazy" />
         </div>
-        <div class="footer-social">
-          <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-          <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
-          <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+        <div class="cta-text">
+          <h2>Ajude milhares de pets a encontrar seus donos!</h2>
+          <a href="/anunciar/cadastro" class="btn btn-primary" title="Anuncie um animal perdido">Anunciar</a>
         </div>
-      </footer>
-    </div>
+      </section>
+    </main>
 
-    <!-- Script para funcionamento dos botões de carrossel -->
-    <script>
-      document.querySelectorAll('.carousel-track-container').forEach(container => {
-        const track = container.querySelector('.carousel-track');
-        const leftArrow = container.querySelector('.left-arrow');
-        const rightArrow = container.querySelector('.right-arrow');
+    <footer class="main-footer">
+      <div class="footer-links">
+        <a href="#">Termos de uso</a>
+        <a href="#">Política de Privacidade</a>
+        <a href="#">Home</a>
+      </div>
+      <div class="footer-info">
+        <p>EncontreSeuPetOficial@gmail.com</p>
+        <p>Team Mavericks Ltda. | CNPJ: 00.123.456/0001-00</p>
+      </div>
+      <div class="footer-social">
+        <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+      </div>
+    </footer>
+  </div>
 
-        leftArrow.addEventListener('click', () => {
-          track.scrollBy({ left: -300, behavior: 'smooth' });
-        });
+  <!-- Script para funcionamento dos botões de carrossel -->
+  <script>
+    document.querySelectorAll('.carousel-track-container').forEach(container => {
+      const track = container.querySelector('.carousel-track');
+      const leftArrow = container.querySelector('.left-arrow');
+      const rightArrow = container.querySelector('.right-arrow');
 
-        rightArrow.addEventListener('click', () => {
-          track.scrollBy({ left: 300, behavior: 'smooth' });
-        });
+      leftArrow.addEventListener('click', () => {
+        track.scrollBy({ left: -300, behavior: 'smooth' });
       });
-    </script>
-  </body>
+
+      rightArrow.addEventListener('click', () => {
+        track.scrollBy({ left: 300, behavior: 'smooth' });
+      });
+    });
+  </script>
+</body>
+
 </html>

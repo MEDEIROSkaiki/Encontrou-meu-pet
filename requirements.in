@@ -4,3 +4,5 @@ Flask
 pyodbc
 # Variaveis de ambiente
 python-dotenv
+# Fazer hash de senhas
+bcrypt

@@ -325,7 +325,6 @@ function emailValido(email) {
   return regex.test(email);
 }
 
-
 // --- Código existente para o botão de cadastro ---
 
 document.querySelector(".cadastrar").addEventListener("click", () => {
@@ -352,53 +351,25 @@ document.querySelector(".cadastrar").addEventListener("click", () => {
   }
 
   if (!emailValido(email)) {
-  alert("Por favor, insira um email válido.");
-  return;
-}
+    alert("Por favor, insira um email válido.");
+    return;
+  }
 
-  if ((!ddd || ddd.length != 2) && (telefone)) {
-  alert("O DDD e o telefone precisam ser válidos.");
-  return;
-}
+  if ((!ddd || ddd.length != 2) && telefone) {
+    alert("O DDD e o telefone precisam ser válidos.");
+    return;
+  }
 
   if (!estado || !cidade || !bairro) {
-  alert("Por favor, insira um CEP válido.");
-  return;
-}
+    alert("Por favor, insira um CEP válido.");
+    return;
+  }
 
   if (senha !== confirmar) {
     alert("As senhas não coincidem.");
     return;
   }
 
-  const dados = {
-    idUsuario: idUsuario,
-    nome: nome,
-    sobrenome: sobrenome,
-    email: email,
-    ddd: ddd,
-    telefone: telefone,
-    endereco: endereco,
-    complemento: complemento, // Adicionado
-    numero: numero, // Adicionado
-    bairro: bairro,
-    cidade: cidade,
-    estado: estado,
-    cep: cep,
-    senha: senha,
-    confirmar: confirmar,
-  };
-
-  fetch("/cadastrar", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(dados),
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      alert(data.mensagem);
-    })
-    .catch((err) => {
-      alert("Erro na requisição");
-    });
+  const meuFormulario = document.getElementById("meuFormulario");
+  meuFormulario.submit();
 });
