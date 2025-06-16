@@ -9,7 +9,6 @@ conn_str = os.getenv("DB_CONN_STR")
 def get_connection():
     try:
         conn =  pyodbc.connect(conn_str)
-        print("Conexão bem-sucedida!")
         return conn
     except Exception as e:
         print(f"Erro ao conectar: {e}")

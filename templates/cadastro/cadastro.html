@@ -1,105 +1,116 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastro de Animal</title>
+    <link rel="stylesheet" href="/static/css/cadastro.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cadastro de Animal</title>
-  <link rel="stylesheet" href="/static/css/cadastro.css" />
-</head>
+  <body>
+    <div class="container">
+      <a href="{{url_for('main_bp.index')}}"
+        ><img src="/static/img//Logo.png" alt="Logo" class="logo"
+      /></a>
+      <img
+        src="/static/img//Cachorro.png"
+        alt="Mulher com cachorro"
+        class="img-left"
+      />
+      <img
+        src="/static/img//Cachorro e gato.png"
+        alt="Gato e cachorro"
+        class="img-right"
+      />
+      <form
+        id="frm"
+        action="{{url_for('main_bp.anunciar_cadastro_post')}}"
+        method="post"
+      >
+        <div class="form-box">
+          <div class="form-group">
+            <label>Situação <span style="color: red">*</span></label
+            ><br /><br />
+            <label
+              ><input type="radio" name="situacao" value="perdido" />
+              Perdido</label
+            >
+            <label
+              ><input type="radio" name="situacao" value="encontrado" />
+              Encontrado</label
+            >
+          </div>
 
-<body>
-  <div class="container">
-    <a href="/"><img src="/static/img//Logo.png" alt="Logo" class="logo" /></a>
-    <img src="/static/img//Cachorro.png" alt="Mulher com cachorro" class="img-left" />
-    <img src="/static/img//Cachorro e gato.png" alt="Gato e cachorro" class="img-right" />
+          <div class="form-group">
+            <label for="nome">Nome <span style="color: red">*</span></label
+            ><br />
+            <input type="text" id="nome_pet" name="nome_pet" />
+          </div>
 
-    <div class="form-box">
-      <div class="form-group">
-        <label>Situação <span style="color: red">*</span></label><br /><br />
-        <label><input type="radio" name="situacao" value="perdido" />
-          Perdido</label>
-        <label><input type="radio" name="situacao" value="encontrado" />
-          Encontrado</label>
-      </div>
+          <div class="form-group">
+            <label for="especie"
+              >Espécie <span style="color: red">*</span></label
+            ><br />
+            <select id="especie" name="especie" required>
+              <option value="">Selecione</option> 
+              {% for especie_item in especies %}
+                  <option 
+                      value="{{ especie_item.idEspecie }}" 
+                      {% if form_data.especie and form_data.especie == especie_item.idEspecie|string %}
+                      selected
+                      {% endif %}
+                  >
+                      {{ especie_item.nome }}
+                  </option>
+              {% endfor %}
+          </select>
+          </div>
 
-      <div class="form-group">
-        <label for="nome">Nome <span style="color: red">*</span></label><br />
-        <input type="text" id="nome" name="nome" />
-      </div>
+          <div class="form-group">
+            <label for="genero">Gênero <span style="color: red">*</span></label
+            ><br />
 
-      <div class="form-group">
-        <label for="especie">Espécie <span style="color: red">*</span></label><br />
-        <select id="especie" name="especie">
-          <option value="">Selecione</option>
-          <option value="cachorro">Cachorro</option>
-          <option value="gato">Gato</option>
-          <option value="passaro">Pássaro</option>
-        </select>
-      </div>
+            <select id="genero" name="genero" required>
+              <option value="">Selecione</option> 
+              {% for genero_item in generos %}
+                  <option 
+                      value="{{ genero_item.id }}" 
+                      {% if form_data.genero and form_data.genero == genero_item.id|string %}
+                      selected
+                      {% endif %}
+                  >
+                      {{ genero_item.nome }}
+                  </option>
+              {% endfor %}
+          </select>
+          </div>
 
-      <div class="form-group">
-        <label for="genero">Gênero <span style="color: red">*</span></label><br />
-        <select id="genero" name="genero">
-          <option value="">Selecione</option>
-          <option value="macho">Macho</option>
-          <option value="femea">Fêmea</option>
-        </select>
-      </div>
-
-      <div class="buttons">
-        <a href="/"><button class="btn voltar">Voltar</button></a>
-        <a href="/anunciar/cadastro2"><button class="btn continuar">Continuar</button></a>
-      </div>
+          <div class="buttons">
+            <a class="btn voltar" href="{{url_for('main_bp.index')}}">Voltar</a>
+            <button type="button" class="btn continuar">Continuar</button>
+          </div>
+        </div>
+      </form>
     </div>
-  </div>
 
-  <script>
-    // Validação e salvamento
-    document.querySelector(".continuar").addEventListener("click", () => {
-      const situacao = document.querySelector(
-        'input[name="situacao"]:checked'
-      )?.value;
-      const nome = document.getElementById("nome").value.trim();
-      const especie = document.getElementById("especie").value;
-      const genero = document.getElementById("genero").value;
+    <script>
+      // Validação e salvamento
+      document.querySelector(".continuar").addEventListener("click", () => {
+        const situacao = document.querySelector(
+          'input[name="situacao"]:checked'
+        )?.value;
+        const nome_pet = document.getElementById("nome_pet").value.trim();
+        const especie = document.getElementById("especie").value;
+        const genero = document.getElementById("genero").value;
 
-      if (!situacao || !nome || !especie || !genero) {
-        alert(
-          "Por favor, preencha todos os campos obrigatórios antes de continuar."
-        );
-        return;
-      }
-
-      localStorage.setItem("situacao", situacao);
-      localStorage.setItem("nome", nome);
-      localStorage.setItem("especie", especie);
-      localStorage.setItem("genero", genero);
-
-      window.location.href = "/anunciar/cadastro2";
-    });
-
-    // Preencher campos ao voltar
-    window.addEventListener("DOMContentLoaded", () => {
-      const situacao = localStorage.getItem("situacao");
-      if (situacao) {
-        document.querySelector(
-          `input[name="situacao"][value="${situacao}"]`
-        ).checked = true;
-      }
-      document.getElementById("nome").value =
-        localStorage.getItem("nome") || "";
-      document.getElementById("especie").value =
-        localStorage.getItem("especie") || "";
-      document.getElementById("genero").value =
-        localStorage.getItem("genero") || "";
-    });
-
-    // Corrigido: botão voltar redireciona para index.html ou página inicial desejada
-    document.querySelector(".voltar").addEventListener("click", () => {
-      window.location.href = "index.html"; // Altere o nome do arquivo se for outra página inicial
-    });
-  </script>
-</body>
-
+        if (!situacao || !nome_pet || !especie || !genero) {
+          alert(
+            "Por favor, preencha todos os campos obrigatórios antes de continuar."
+          );
+          return;
+        }
+        form = document.getElementById("frm").submit();
+      });
+    </script>
+  </body>
 </html>
