@@ -1,82 +1,193 @@
+# 🐾 Encontrou Meu Pet
 
-# ENCONTROU-MEU-PET
-
-**Conectando Pets Perdidos, Reunindo Famílias Felizes Rapidamente**  
-![Estrelas do GitHub](https://img.shields.io/github/stars/EncontroSeuPet/encontrou-meu-pet?style=social)  
-![Forks do GitHub](https://img.shields.io/github/forks/EncontroSeuPet/encontrou-meu-pet?style=social)  
-_Built with love and tech knowledge._  
-![Licença do GitHub](https://img.shields.io/github/license/EncontroSeuPet/encontrou-meu-pet)
+Aplicação web para cadastro, pesquisa e anúncio de animais, com foco em facilitar o encontro entre pets perdidos e seus tutores ou novos adotantes. Desenvolvido em **Python (Flask)** com conexão a banco de dados via **ODBC**.
 
 ---
 
-## Índice
+## 🚀 Funcionalidades
 
-- [Visão Geral](#visão-geral)
-- [Primeiros Passos](#primeiros-passos)
-  - [Pré-requisitos](#pré-requisitos)
-  - [Instalação](#instalação)
-- [Uso](#uso)
-- [Testes](#testes)
-
----
-
-## Visão Geral
-
-Projeto criado para facilitar a reconexão entre tutores e pets perdidos, utilizando tecnologia para acelerar esse processo e trazer felicidade às famílias.
+- Tela de login e cadastro de usuário
+- Validação de e-mail e senha no cadastro
+- Formulário para cadastro de animais (espécie, raça, porte, gênero, situação)
+- Consulta dinâmica de espécies, raças e atributos relacionados
+- APIs REST para retorno de dados ao frontend
+- Páginas renderizadas com templates HTML (via `render_template`)
 
 ---
 
-## Primeiros Passos
+## 🧱 Estrutura do Projeto
+
+```bash
+.
+├── app.py                     # Arquivo principal que inicia a aplicação
+├── .env                       # Variáveis de ambiente (não versionado)
+├── .gitignore                 # Ignora arquivos para versionamento Git
+├── README.md                  # Documentação do projeto
+├── requirements.txt           # Dependências do projeto
+├── dev-requirements.in        # Dependências de desenvolvimento
+├── dev-requirements.txt       # Dependências resolvidas de dev
+├── requirements.in            # Dependências base
+│
+├── db/                        # Camada de acesso ao banco de dados
+│   ├── __init__.py
+│   ├── dicionarios_db.py
+│   ├── usuario_db.py
+│   └── __pycache__/           # Cache dos arquivos compilados
+│       ├── especies_db.cpython-313.pyc
+│       ├── generos_db.cpython-313.pyc
+│       ├── portes_db.cpython-313.pyc
+│       ├── racas_db.cpython-313.pyc
+│       ├── situacoes_db.cpython-313.pyc
+│       └── usuario_db.cpython-313.pyc
+│
+├── rotas/                     # Arquivos que definem as rotas da aplicação
+│   ├── __init__.py
+│   ├── api.py
+│   ├── auth.py
+│   └── main.py
+│
+├── static/                    # Arquivos estáticos (CSS, JS, imagens)
+│   ├── css/
+│   │   ├── cadastro.css
+│   │   ├── cadastro_2.css
+│   │   ├── cadastro_3.css
+│   │   ├── cadastro_concluido.css
+│   │   ├── cadastro_usuario.css
+│   │   ├── login.css
+│   │   ├── pesquisa.css
+│   │   └── style.css
+│   ├── img/                   # (Pasta de imagens)
+│   └── js/
+│       ├── cadastro_2.js
+│       └── cadastro_usuario.js
+│
+├── templates/                 # Templates HTML para renderização
+│   ├── cadastro/
+│   │   ├── cadastro.html
+│   │   ├── cadastro_2.html
+│   │   ├── cadastro_3.html
+│   │   ├── cadastro_concluido.html
+│   │   └── cadastro_usuario.html
+│   ├── index.html
+│   ├── login.html
+│   └── pesquisa.html
+│
+├── utils/                     # Funções utilitárias
+│   ├── __pycache__/
+│   │   ├── with_connection.cpython-313.pyc
+│   ├── login_verification.py
+│   └── with_connection.py
+│
+└── venv/                      # Ambiente virtual Python (não versionado)
+    ├── Include/
+    ├── Lib/
+    │   └── site-packages/
+    ├── Scripts/
+    └── pyvenv.cfg
+
+```
+
+---
+
+## 🛠️ Como executar
 
 ### Pré-requisitos
 
-Este projeto requer as seguintes dependências:
+- Python 3.13+
+- Driver ODBC instalado (ex: para SQL Server)
 
-- **Linguagem de Programação:** Python  
-- **Gerenciador de Pacotes:** pip
-
-### Instalação
-
-Construa o projeto Encontro-meu-pet a partir do código-fonte e instale as dependências:
-
-1. Clone o repositório:
+### 1. Instalar as dependências
 
 ```bash
-git clone https://github.com/EncontroSeuPet/encontrou-meu-pet
+bash
+CopiarEditar
+pip install -r requirements.txt
+
 ```
 
-2. Navegue até o diretório do projeto:
+### 2. Configurar variáveis de ambiente
+
+Crie um arquivo `.env` com as seguintes variáveis:
+
+```
+ini
+CopiarEditar
+DRIVER={SQL Server}
+SERVER=seu_servidor
+DATABASE=seu_banco
+UID=usuario
+PWD=senha
+```
+
+### 3. Executar o servidor
 
 ```bash
-cd encontrou-meu-pet
+bash
+CopiarEditar
+python app.py
 ```
 
-3. Instale as dependências:
-
-```bash
-pip install -r requirements.txt -r requirements-dev.txt -r requirements-test.txt
-```
+Acesse [http://localhost:5000](http://localhost:5000/) no navegador.
 
 ---
 
-## Uso
+## 🧪 Rotas Principais
 
-Execute o projeto com:
+| Método | Rota | Descrição |
+| --- | --- | --- |
+| GET | `/` | Página inicial |
+| GET | `/login` | Página de login |
+| GET | `/cadastrar` | Página de cadastro |
+| POST | `/cadastrar` | Cadastro de usuário |
+| GET | `/pesquisa` | Página de pesquisa |
+| GET | `/anunciar/cadastro` | Página de cadastro de animal |
+| GET | `/anunciar/get_all_especies` | Retorna lista de espécies |
+| GET | `/anunciar/get_all_generos` | Retorna lista de gêneros |
+| GET | `/anunciar/get_all_portes` | Retorna lista de portes |
+| GET | `/anunciar/get_all_situacoes` | Retorna lista de situações |
+| POST | `/racas` | Retorna raças com base na espécie |
 
-```bash
-python [entrypoint]
-```
+---
 
-(Substitua `[entrypoint]` pelo arquivo principal do projeto, se necessário)
+## 📦 Dependências Principais
+
+- Flask
+- [pyodbc](https://pypi.org/project/pyodbc/)
+- [python-dotenv](https://pypi.org/project/python-dotenv/)
 
 ---
 
-## Testes
+## 📁 .gitignore
 
-Este projeto utiliza o framework de testes `pytest`. Para executar os testes, utilize:
+O projeto ignora:
 
-```bash
-pytest
-```
+- Arquivos temporários e cache (`__pycache__`, `.pyc`)
+- Configurações do VS Code (`.vscode`)
+- Arquivos `.env` com dados sensíveis
 
 ---
+
+## 👨‍💻 Autores
+
+- Ronaldo Moreira
+    - [Romope83](https://github.com/Romope83)
+- Kaiki Medeiros
+    - GitHub: [MEDEIROSkaiki](https://github.com/MEDEIROSkaiki)
+- Kaua Felipe de Melo
+    - GitHub: [Drivol](https://github.com/Drivol)
+- Felipe Oliveira
+    - GitHub: [feolcostaa](https://github.com/feolcostaa)
+
+---
+
+## 🔗 Links
+
+https://www.figma.com/design/vLqg0Rf4S8QSEaVj1wzENh/Untitled?node-id=0-1&t=YIBUMzBAihjUTdfH-1
+
+https://trello.com/invite/b/6837a2c44ac0b4c93fc71ccf/ATTIbb34e870aa5927287c0ac465000a2310435C03C9/projeto-fim-semestre
+
+---
+
+## 📄Regras de Negócio
+
+[Regras de Negócio](https://www.notion.so/Regras-de-Neg-cio-214cd7be416f806cb98cfeb5d4bf6320?pvs=21)
