@@ -1,59 +1,69 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cadastro de Animal - Imagem</title>
-  <link rel="stylesheet" href="cadastro_3.css" />
-</head>
-<body>
-  <div class="container">
-    <img src="/static/img//Logo.png" alt="Logo" class="logo" />
-    <img src="Images/Cachorro e gato.png" alt="Cachorro e gato" class="img-right" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastro de Animal - Imagem</title>
+    <link rel="stylesheet" href="/static/css/cadastro_3.css" />
+  </head>
+  <body>
+    <div class="container">
+      <a href="{{url_for('main_bp.index')}}"
+        ><img src="/static/img//Logo.png" alt="Logo" class="logo"
+      /></a>
+      <img
+        src="Images/Cachorro e gato.png"
+        alt="Cachorro e gato"
+        class="img-right"
+      />
+      <form
+        id="frm"
+        action="{{url_for('main_bp.anunciar_cadastro3')}}"
+        method="post"
+      >
+        <div class="form-box">
+          <div class="form-group">
+            <label for="imagem"
+              >Foto do Animal <span style="color: red">*</span></label
+            >
+            <input type="file" id="imagem" name="imagem" accept="image/*" />
+          </div>
 
-    <div class="form-box">
-      <div class="form-group">
-        <label for="imagem">Foto do Animal <span style="color: red;">*</span></label>
-        <input type="file" id="imagem" name="imagem" accept="image/*" />
-      </div>
+          <div class="form-group">
+            <label for="descricao">Descrição adicional</label>
+            <input
+              type="text"
+              id="descricao"
+              name="descricao"
+              placeholder="Ex: Tem uma coleira azul..."
+              value="{{ form_data.descricao if form_data.descricao else '' }}"
+            />
+          </div>
 
-      <div class="form-group">
-        <label for="descricao">Descrição adicional</label>
-        <input type="text" id="descricao" name="descricao" placeholder="Ex: Tem uma coleira azul...">
-      </div>
-
-      <div class="buttons">
-        <button class="btn voltar">Voltar</button>
-        <button class="btn concluir">Concluir</button>
-      </div>
+          <div class="buttons">
+            <button
+              type="button"
+              onclick="window.history.back()"
+              class="btn voltar"
+            >
+              Voltar
+            </button>
+            <button type="button" class="btn concluir">Concluir</button>
+          </div>
+        </div>
+      </form>
     </div>
-  </div>
 
-  <script>
-    document.querySelector('.voltar').addEventListener('click', () => {
-      window.location.href = 'cadastro_2.html';
-    });
+    <script>
+      document.querySelector(".concluir").addEventListener("click", () => {
+        const imagem = document.getElementById("imagem").files[0];
 
-    document.querySelector('.concluir').addEventListener('click', () => {
-      const imagem = document.getElementById('imagem').files[0];
-
-      if (!imagem) {
-        alert("Por favor, selecione uma imagem antes de concluir.");
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onload = function () {
-        localStorage.setItem('imagemAnimal', reader.result);
-        localStorage.setItem('descricaoAnimal', document.getElementById('descricao').value.trim());
-        // Finaliza sem alert
-      };
-      reader.readAsDataURL(imagem);
-    });
-
-    window.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('descricao').value = localStorage.getItem('descricaoAnimal') || '';
-    });
-  </script>
-</body>
+        if (!imagem) {
+          alert("Por favor, selecione uma imagem antes de concluir.");
+          return;
+        }
+        document.getElementById("frm").submit();
+      });
+    </script>
+  </body>
 </html>

@@ -8,21 +8,44 @@
 </head>
 <body>
   <div class="container">
-    <img src="/static/img//Logo.png" alt="Logo" class="logo" />
+    <a href="{{url_for('main_bp.index')}}"><img src="/static/img//Logo.png" alt="Logo" class="logo" /></a>
     <img src="/static/img/Gato.png" alt="Gato" class="img-right"/>
 
+    <form id="frm" action="{{url_for('main_bp.anunciar_cadastro2')}}" method="post">
+      <input type="hidden" id="estado_hidden" name="estado_hidden" value="{{form_data.estado}}">
+      <input type="hidden" id="municipio_hidden" name="municipio_hidden" value="{{form_data.municipio}}">
     <div class="form-box">
       <div class="form-group">
         <label for="raca">Raça <span style="color: red;">*</span></label>
         <select id="raca" name="raca">
-          <option value="">Selecione</option>
+          <option value="">Selecione</option> 
+          {% for raca_item in racas %}
+              <option 
+                  value="{{ raca_item.id }}" 
+                  {% if form_data.raca and form_data.raca == raca_item.idRaca|string %}
+                  selected
+                  {% endif %}
+              >
+                  {{ raca_item.nome }}
+              </option>
+          {% endfor %}
+      </select>
         </select>
       </div>
 
       <div class="form-group">
         <label for="porte">Porte <span style="color: red;">*</span></label>
         <select id="porte" name="porte">
-          <option value="">Selecione</option>
+          {% for porte_item in portes %}
+          <option 
+              value="{{ porte_item.id }}" 
+              {% if form_data.porte and form_data.porte == porte_item.idPorte|string %}
+              selected
+              {% endif %}
+          >
+              {{ porte_item.nome }}
+          </option>
+          {% endfor %}
         </select>
       </div>
 
@@ -80,15 +103,18 @@
       </div>
 
       <div class="buttons">
-        <button class="btn voltar">Voltar</button>
-        <button class="btn continuar">Continuar</button>
+        <button type="button" onclick="window.history.back()" class="btn voltar">Voltar</button>
+        <button type="button" class="btn continuar">Continuar</button>
       </div>
     </div>
+  </form>
   </div>
 
   <script>
     const estadoSelect = document.getElementById("estado");
     const municipioSelect = document.getElementById("municipio");
+    const estado_hidden = document.getElementById("estado_hidden");
+    const municipio_hidden = document.getElementById("municipio_hidden");    
 
     // Função que carrega os municípios do estado selecionado
     function carregarMunicipios(estadoId) {
@@ -99,7 +125,7 @@
           municipios.forEach(municipio => {
             const option = document.createElement("option");
             option.value = municipio.nome;
-            option.textContent = municipio.nome;
+            option.textContent = municipio.nome;            
             municipioSelect.appendChild(option);
           });
 
@@ -114,75 +140,27 @@
     fetch("https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome")
       .then(res => res.json())
       .then(estados => {
+        estadoSelecionado = 
         estados.forEach(estado => {
           const option = document.createElement("option");
-          option.value = estado.id;
+          option.value = estado.sigla;
           option.textContent = estado.nome;
+          if(estado_hidden.value)
+            option.selected = true;
           estadoSelect.appendChild(option);
         });
 
-        const estadoSalvo = localStorage.getItem('estado');
-        if (estadoSalvo) {
-          estadoSelect.value = estadoSalvo;
+        if (estadoSelect.value) {
           carregarMunicipios(estadoSalvo);
         }
       });
 
-    // Quando o estado muda, carrega municípios
+
     estadoSelect.addEventListener('change', () => {
       const estadoId = estadoSelect.value;
       if (estadoId) {
-        localStorage.setItem('estado', estadoId);
         carregarMunicipios(estadoId);
       }
-    });
-
-    // Popular raça
-    const especie = localStorage.getItem('especie');
-    const racaSelect = document.getElementById('raca');
-    // const racasPorEspecie = {
-    //   cachorro: ['Vira-lata', 'Poodle', 'Labrador', 'Bulldog', 'Golden Retriever', 'Shih Tzu', 'Chihuahua', 'Pastor Alemão', 'Beagle', 'Dálmata', 'Desconhecida'],
-    //   gato: ['Siamês', 'Persa', 'Angorá', 'Vira-lata', 'Maine Coon', 'Sphynx', 'Bengal', 'Ragdoll', 'British Shorthair', 'Abissínio', 'Desconhecida'],
-    //   passaro: ['Canário', 'Papagaio', 'Periquito', 'Calopsita', 'Arara', 'Curió', 'Coleiro', 'Trinca-ferro', 'Jandaia', 'Tucano', 'Desconhecida']
-    // };
-   fetch('/racas')
-  .then(res => res.json())
-  .then(racas => {
-    racaSelect.innerHTML = '<option value="">Selecione</option>';
-    racas.forEach(raca => {
-      // Mapeia a espécie conforme os valores do banco
-      const especieMap = { cachorro: 1, gato: 2, passaro: 3 };
-      //if (especieMap[especie] === raca.idespecie) {
-        const option = document.createElement('option');
-        option.value = raca.nome.toLowerCase();
-        option.textContent = raca.nome;
-        racaSelect.appendChild(option);
-      //}
-    });
-
-    const racaSalva = localStorage.getItem('raca');
-    if (racaSalva) racaSelect.value = racaSalva;
-  });
-
-    // if (especie && racasPorEspecie[especie]) {
-    //   racasPorEspecie[especie].forEach(raca => {
-    //     const option = document.createElement('option');
-    //     option.value = raca.toLowerCase();
-    //     option.textContent = raca;
-    //     racaSelect.appendChild(option);
-    //   });
-
-    //   const racaSalva = localStorage.getItem('raca');
-    //   if (racaSalva) racaSelect.value = racaSalva;
-    // }
-
-    // Repor valores ao voltar
-    ['porte', 'cor', 'olhos', 'data'].forEach(id => {
-      document.getElementById(id).value = localStorage.getItem(id) || '';
-    });
-
-    document.querySelector('.voltar').addEventListener('click', () => {
-      window.location.href = 'cadastro.html';
     });
 
     document.querySelector('.continuar').addEventListener('click', () => {
@@ -193,12 +171,8 @@
         alert("Todos os campos são obrigatórios. Por favor, preencha todos antes de continuar.");
         return;
       }
-
-      campos.forEach(id => {
-        localStorage.setItem(id, document.getElementById(id).value);
-      });
-
-      window.location.href = 'cadastro_3.html';
+      frm = document.getElementById('frm').submit()
+      
     });
 
 //const racaSelect = document.getElementById('raca');
