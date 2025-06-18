@@ -186,6 +186,8 @@ https://www.figma.com/design/vLqg0Rf4S8QSEaVj1wzENh/Untitled?node-id=0-1&t=YIBUM
 
 https://trello.com/invite/b/6837a2c44ac0b4c93fc71ccf/ATTIbb34e870aa5927287c0ac465000a2310435C03C9/projeto-fim-semestre
 
+https://ronny007.notion.site/Projeto-PET-2074d8a9a2dd8059a90cda22585333f9?source=copy_link
+
 ---
 
 ## 📄Regras de Negócio
