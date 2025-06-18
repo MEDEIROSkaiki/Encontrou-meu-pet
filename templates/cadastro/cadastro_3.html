@@ -11,15 +11,11 @@
       <a href="{{url_for('main_bp.index')}}"
         ><img src="/static/img//Logo.png" alt="Logo" class="logo"
       /></a>
-      <img
-        src="Images/Cachorro e gato.png"
-        alt="Cachorro e gato"
-        class="img-right"
-      />
       <form
         id="frm"
         action="{{url_for('main_bp.anunciar_cadastro3')}}"
         method="post"
+        enctype="multipart/form-data"
       >
         <div class="form-box">
           <div class="form-group">

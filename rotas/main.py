@@ -41,6 +41,7 @@ def anunciar_cadastro_post():
     nome_pet = data.get('nome_pet', '').strip()
     especie_id = data.get('especie', '').strip()
     genero_id = data.get('genero', '').strip()
+    situacao_id = data.get('situacao', '').strip()
     
     form_data = request.form.to_dict()
     
@@ -91,6 +92,7 @@ def anunciar_cadastro_post():
         'nome_pet': nome_pet,
         'especie_id': especie_id,
         'genero_id': genero_id,
+        'situacao_id':situacao_id
     }
 
     return redirect(url_for('main_bp.anunciar_cadastro2')) 
@@ -188,7 +190,7 @@ def anunciar_cadastro2_post():
         'cor': cor,
         'olhos': olhos,
         "porte_id":porte,
-        "data":dataOcorrencia,
+        "dataOcorrencia":dataOcorrencia,
         "estado":estado,
         "municipio":municipio
     }
@@ -276,19 +278,20 @@ def anunciar_cadastro3_post():
         
 
         pets_db.adicionar_pet(
-        usuario_id=final_pet_data['usuario_id'])
-        porte_id=final_pet_data['porte_id'],
-        situacao_id=final_pet_data['situacao_id'],
-        raca_id=final_pet_data['raca_id'],
-        genero_id=final_pet_data['genero_id'],
-        nome_pet=final_pet_data['nome_pet'],
-        municipio=final_pet_data['municipio'],
-        estado=final_pet_data['estado'],
-        data=final_pet_data['data'],
-        cor=final_pet_data['cor'],
-        olhos=final_pet_data['olhos'],
-        descricao=final_pet_data['descricao'],
-        imagem_path=final_pet_data['imagem_path'],
+            usuario_id=final_pet_data['usuario_id'],
+            porte_id=final_pet_data['porte_id'],
+            situacao_id=final_pet_data['situacao_id'],
+            raca_id=final_pet_data['raca_id'],
+            genero_id=final_pet_data['genero_id'],
+            nome_pet=final_pet_data['nome_pet'],
+            municipio=final_pet_data['municipio'],
+            estado=final_pet_data['estado'],
+            data_cadastro=final_pet_data['dataOcorrencia'],
+            cor=final_pet_data['cor'],
+            olhos=final_pet_data['olhos'],
+            descricao=final_pet_data['descricao'],
+            imagem_path=final_pet_data['imagem_path']
+        )
         
 
     except Exception as e:
@@ -302,7 +305,7 @@ def anunciar_cadastro3_post():
     session.pop('cadastro_pet_step2_data', None)
 
     flash('Pet cadastrado com sucesso!', 'success')
-    return redirect(url_for('main_bp.cadastro_concluido'))
+    return redirect(url_for('main_bp.index'))
 
 
 

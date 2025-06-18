@@ -78,21 +78,29 @@ input[type="radio"] {
   margin-top: 10em;
 }
 
-.btn {
-  background-color: #6b55e0;
-  color: white;
-  border: none;
-  border-radius: 20px;
-  padding: 10px 20px;
-  font-size: 20px;
-  font-style: bold;
-  cursor: pointer;
-  width: 150px;
-  height: 50px;
-  text-decoration: none;
-  text-align: center;
+.btn:hover {
+  background-color: #5842c0;
 }
 
-.btn:hover {
+a.btn, button.btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  text-decoration: none;
+  font-family: inherit;
+  font-size: 20px;
+  font-weight: bold;
+  width: 150px;
+  height: 50px;
+  border: none;
+  border-radius: 20px;
+  background-color: #6b55e0;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+a.btn:hover, button.btn:hover {
   background-color: #5842c0;
 }
